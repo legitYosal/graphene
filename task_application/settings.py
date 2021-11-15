@@ -25,7 +25,7 @@ SECRET_KEY = 'django-insecure-9giw!l!n61oasm1t4x7q-!9ph*$ku$#^f7&vb_tg&)5rc43l48
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['localhost', ]
+ALLOWED_HOSTS = ['localhost', '127.0.0.1']
 
 
 # Application definition
@@ -40,7 +40,12 @@ INSTALLED_APPS = [
 
     'tasks',
     'users',
+
+    'graphene_django',
 ]
+GRAPHENE = {
+    'SCHEMA': 'task_application.schema.schema',
+}
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
