@@ -1,4 +1,5 @@
 import graphene
+from graphql_jwt.decorators import login_required
 from .models import Task
 from .types import TaskType
 from . import mutations
@@ -11,7 +12,8 @@ class Mutation(graphene.ObjectType):
 class Query(graphene.ObjectType):
     tasks = graphene.List(TaskType)
 
+    @login_required
     def resolve_tasks(root, info, **kwargs):
-        return Task.objects.all()
-
-schema = graphene.Schema(query=Query, mutation=Mutation)
+        return Task.objects.filter(
+            user=info.context.user
+        )
