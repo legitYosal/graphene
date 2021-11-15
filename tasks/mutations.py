@@ -3,12 +3,24 @@ from graphql_jwt.decorators import login_required
 from .types import TaskType
 from .models import Task
 
+class TaskStatusEnum(graphene.Enum):
+    DONE = Task.TaskStatus.DONE
+    INPROGRESS = Task.TaskStatus.INPROGRESS
+    NOTSTARTED = Task.TaskStatus.NOTSTARTED
+
 class TaskArgumants:
     id = graphene.ID()
     title = graphene.String()
     description = graphene.String()
     # user = graphene.Int()
-    status = graphene.String()
+    status = graphene.Argument(
+        graphene.Enum('TaskStatuses', [
+            (
+                name,
+                Task.TaskStatus.values[index]
+            ) for index, name in enumerate(Task.TaskStatus.names)
+        ])
+    )
     due_date = graphene.DateTime()
     created_at = graphene.DateTime()
     updated_at = graphene.DateTime()
