@@ -1,6 +1,5 @@
 from .base import BaseTest
-from users.models import User
-from config import bcrypt, db
+from config import bcrypt, db, User
 
 class TestUser(BaseTest):
 

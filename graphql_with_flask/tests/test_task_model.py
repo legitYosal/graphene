@@ -1,8 +1,6 @@
 from datetime import datetime
-from config import db
+from config import db, User, Task
 from .base import BaseTest
-from users.models import User
-from tasks.models import Task
 
 class TestTask(BaseTest):
 

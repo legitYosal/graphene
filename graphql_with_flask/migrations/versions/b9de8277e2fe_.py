@@ -1,17 +1,16 @@
 """empty message
 
-Revision ID: 4eb204579066
+Revision ID: b9de8277e2fe
 Revises: 
-Create Date: 2021-11-17 14:34:34.986452
+Create Date: 2021-11-17 21:45:22.371106
 
 """
 from alembic import op
 import sqlalchemy as sa
-import sqlalchemy_utils
-from tasks.models import Task
+
 
 # revision identifiers, used by Alembic.
-revision = '4eb204579066'
+revision = 'b9de8277e2fe'
 down_revision = None
 branch_labels = None
 depends_on = None
@@ -32,8 +31,8 @@ def upgrade():
     sa.Column('title', sa.String(length=100), nullable=False),
     sa.Column('description', sa.String(length=255), nullable=True),
     sa.Column('user_id', sa.Integer(), nullable=False),
-    sa.Column('status', sqlalchemy_utils.types.choice.ChoiceType(Task.TaskStatus), nullable=False),
-    sa.Column('due_date', sa.DateTime(), nullable=True),
+    sa.Column('status', sa.Enum('NOTSTARTED', 'INPROGRESS', 'DONE', name='taskstatus'), nullable=False),
+    sa.Column('due_date', sa.DateTime(), nullable=False),
     sa.Column('created_at', sa.DateTime(), server_default=sa.text('(CURRENT_TIMESTAMP)'), nullable=False),
     sa.Column('updated_at', sa.DateTime(), server_default=sa.text('(CURRENT_TIMESTAMP)'), nullable=False),
     sa.ForeignKeyConstraint(['user_id'], ['users.id'], ),
