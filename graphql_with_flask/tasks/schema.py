@@ -11,7 +11,7 @@ class TaskArgumants:
     id = graphene.ID()
     title = graphene.String()
     description = graphene.String()
-    user = graphene.Int()
+    # user = graphene.Int()
     status = graphene.Argument(
         graphene.Enum('TaskStatuses', [
             (key.value, Task.TaskStatus(key).value) for key in Task.TaskStatus
@@ -33,8 +33,7 @@ class CreateTask(graphene.Mutation):
         task = Task(
             title=kwargs.get('title'),
             description=kwargs.get('description'),
-            # user=info.context.user,
-            user_id=kwargs.get('user'),
+            user=info.context.user,
             due_date=kwargs.get('due_date'),
         )
         db.session.add(task)
@@ -49,10 +48,10 @@ class UpdateTask(graphene.Mutation):
 
     @classmethod
     def mutate(cls, root, info, **kwargs):
-        # task = Task.objects.filter(
-        #     user=info.context.user,
-        # ).get(id=kwargs.get('id'))
-        task = Task.query.get(kwargs.get('id'))
+        task = Task.query.filter_by(
+            id=kwargs.get('id'),
+            user=info.context.user,
+        ).first_or_404()
         task.title = kwargs.get('title', task.title)
         task.description = kwargs.get('description', task.description)
         # task.user = kwargs.get('user')
@@ -69,10 +68,10 @@ class DeleteTask(graphene.Mutation):
 
     @classmethod
     def mutate(cls, root, info, **kwargs):
-        # task = Task.objects.filter(
-        #     user=info.context.user,
-        # ).get(id=kwargs.get('id'))
-        task = Task.query.get(kwargs.get('id')).delete()
+        task = Task.query.filter_by(
+            id=kwargs.get('id'),
+            user=info.context.user,
+        ).first_or_404().delete()
         db.session.commit()
         return None
 
@@ -80,7 +79,7 @@ class DeleteTask(graphene.Mutation):
 class Query(graphene.ObjectType):
     tasks = graphene.List(TaskType)
     def resolve_tasks(root, info, **kwargs):
-        return Task.query.all()
+        return Task.query.filter_by(user=info.context.user)
 
 
 class Mutation(graphene.ObjectType):

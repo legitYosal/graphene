@@ -38,7 +38,25 @@ class ActivateUser(graphene.Mutation):
         db.session.commit()
         return ActivateUser(user=user)
 
+class TokenAuth(graphene.Mutation):
+    class Arguments:
+        email = graphene.String()
+        password = graphene.String()
+
+    token = graphene.String()
+
+    @classmethod
+    def mutate(cls, root, info, **kwargs):
+        user = User.query.filter_by(
+            email=kwargs.get('email')
+        ).first_or_404()
+        if user.check_password(kwargs.get('password')):
+            return TokenAuth(token=user.generate_jwt())
+        else:
+            return None
+
 class Mutation(graphene.ObjectType):
+    token_auth = TokenAuth.Field()
     register_user = RegisterUser.Field()
     activate_user = ActivateUser.Field()
 
@@ -46,6 +64,5 @@ class Query(graphene.ObjectType):
     user = graphene.Field(UserType)
     def resolve_user(self, info, **kwargs):
         """This is actually the get profile"""
-        # user = info.context.user
-        user = User.query.get(1)
+        user = info.context.user
         return user

@@ -24,6 +24,9 @@ Run server in debug mode:
 $ python3 app.py
 ```
 
+Flask graphene uses graphiql for web client to interact with exposed graphql interface, but it does not support sending extra headers, and we need to send token to authenticate.  
+I have used [Altair tool](https://altair.sirmuel.design/) to send graphql requests.  
+
 
 # Resources and Notes
 Here are some good articles and documentations that I found useful:  
