@@ -15,5 +15,4 @@ class Query(graphene.ObjectType):
     def resolve_user(self, info, **kwargs):
         """This is actually the get profile"""
         user = info.context.user
-        print(user)
         return user

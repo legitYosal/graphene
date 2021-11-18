@@ -3,11 +3,6 @@ from graphql_jwt.decorators import login_required
 from .types import TaskType
 from .models import Task
 
-class TaskStatusEnum(graphene.Enum):
-    DONE = Task.TaskStatus.DONE
-    INPROGRESS = Task.TaskStatus.INPROGRESS
-    NOTSTARTED = Task.TaskStatus.NOTSTARTED
-
 class TaskArgumants:
     id = graphene.ID()
     title = graphene.String()
