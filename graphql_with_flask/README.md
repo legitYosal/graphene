@@ -3,6 +3,7 @@
 This project intends to implement a task manager application using graphql, sqlalchemy and flask.  
 Challenges I am trying to solve are:
 * using SQLAlchemy ORM in a professional way(Using alembic for migrations).
+* using custom authentication for graphql.
 
 
 # Installation
@@ -55,9 +56,7 @@ You can obtain a JWT by the following mutation
 ```
 mutation {
   tokenAuth(email:"example@gmail.com", password: "123") {
-    payload
     token
-    refreshExpiresIn
   }
 }
 ```
